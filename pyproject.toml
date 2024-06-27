@@ -12,7 +12,7 @@ classifiers=[
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Typing::Stubs Only",
+    "Typing :: Stubs Only",
 ]
 description = "Extended type hints for pydicom"
 keywords = ["pydicom, typing"]

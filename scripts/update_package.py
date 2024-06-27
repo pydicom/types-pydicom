@@ -11,6 +11,26 @@ SRC_DIRECTORY = BASE_DIRECTORY / "custom"
 DST_DIRECTORY = BASE_DIRECTORY / "pydicom"
 PYDICOM_DIRECTORY = BASE_DIRECTORY.parent / "pydicom" / "src" / "pydicom"
 
+
+REMOVALS = [
+    DST_DIRECTORY / "pixels" / "decoders" / "gdcm.pyi",
+    DST_DIRECTORY / "pixels" / "decoders" / "pillow.pyi",
+    DST_DIRECTORY / "pixels" / "decoders" / "pyjpegls.pyi",
+    DST_DIRECTORY / "pixels" / "decoders" / "pylibjpeg.pyi",
+    DST_DIRECTORY / "pixels" / "decoders" / "rle.pyi",
+    DST_DIRECTORY / "pixels" / "encoders" / "gdcm.pyi",
+    DST_DIRECTORY / "pixels" / "encoders" / "native.pyi",
+    DST_DIRECTORY / "pixels" / "encoders" / "pyjpegls.pyi",
+    DST_DIRECTORY / "pixels" / "encoders" / "pylibjpeg.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "gdcm_handler.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "jpeg_ls_handler.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "numpy_handler.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "pillow_handler.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "pylibjpeg_handler.pyi",
+    DST_DIRECTORY / "pixel_data_handlers" / "rle_handler.pyi",
+]
+
+
 if __name__ == "__main__":
     # Clear out the stub files
     if DST_DIRECTORY.exists():
@@ -29,7 +49,7 @@ if __name__ == "__main__":
 
     if not list(DST_DIRECTORY.glob("*.pyi")):
         print("  Failed to generate the basic stub files")
-        sys.exit()
+        sys.exit(1)
 
     # Generate the custom stub files
     print("Generating custom stub files")
@@ -48,3 +68,8 @@ if __name__ == "__main__":
     print("Replacing basic stub files with custom ones")
     for path in SRC_DIRECTORY.glob("*.pyi"):
         shutil.copyfile(path, DST_DIRECTORY / path.name)
+
+    # Remove unnecessary stubs
+    print("Removing unnecessary stubs")
+    for path in REMOVALS:
+        path.unlink(missing_ok=True)

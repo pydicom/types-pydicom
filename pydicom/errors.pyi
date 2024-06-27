@@ -1,0 +1,6 @@
+from typing import Any
+
+class InvalidDicomError(Exception):
+    def __init__(self, *args: Any) -> None: ...
+
+class BytesLengthException(Exception): ...

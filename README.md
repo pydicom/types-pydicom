@@ -1,19 +1,45 @@
 # types-pydicom
-Extended type hints for pydicom
+Extended type hints for [pydicom's](https://github.com/pydicom/pydicom)
+Dataset element keywords.
 
-Basic generation
-
+## Installation
 ```bash
-pip install mypy
-git clone https://github.com/pydicom/types-pydicom
-cd types-pydicom
-stubgen path/to/pydicom -o .
+$ pip install types-pydicom
 ```
 
-Some types will have `Incomplete`, these need to be fixed in pydicom
+## Usage
+```python
+# test_typing.py
 
-Then run script to fill out the attribute types.
+from pydicom import Dataset
 
-* Need GH action to monitor pydicom merge and run auto-update action as required
-* Failure on `Incomplete` types?
-* Remove pixel plugin stubs
+ds = Dataset()
+ds.SamplesPerPixel = "abc"
+reveal_type(ds.PixelData)
+```
+
+```bash
+$ pip install pydicom types-pydicom mypy
+$ mypy test_typing.py
+test_typing.py:5: error: Incompatible types in assignment (expression has type "str", variable has type "int")  [assignment]
+test_typing.py:6: note: Revealed type is "Union[None, builtins.bytes]"
+Found 1 errors in 1 file (checked 1 source file)
+```
+
+## Development
+```bash
+git clone https://github.com/pydicom
+git clone https://github.com/pydicom/types-pydicom
+cd types-pydicom
+mkdir env
+python3.10 -m venv env/env310
+source env/env310/bin/activate
+pip install -e .[dev]
+```
+
+### Updating
+```bash
+cd types-pydicom
+source env/env310/bin/activate
+python scripts/update_package.py
+```

@@ -8,7 +8,7 @@ import sys
 
 BASE_DIRECTORY = Path(__file__).parent.parent
 SRC_DIRECTORY = BASE_DIRECTORY / "custom"
-DST_DIRECTORY = BASE_DIRECTORY / "pydicom"
+DST_DIRECTORY = BASE_DIRECTORY / "pydicom-stubs"
 PYDICOM_DIRECTORY = BASE_DIRECTORY.parent / "pydicom" / "src" / "pydicom"
 
 

@@ -4,12 +4,12 @@ from typing import Any
 
 from pydicom._dicom_dict import DicomDictionary
 
-_PKG_DIRECTORY = Path(__file__).parent.parent
-DATASET_STUB = _PKG_DIRECTORY / "pydicom" / "dataset.pyi"
-TEST_OUTPUT = _PKG_DIRECTORY / "custom" / "dataset.pyi"
+BASE_DIRECTORY = Path(__file__).parent.parent
+DS_DST = BASE_DIRECTORY / "custom" / "dataset.pyi"
+DS_SRC = BASE_DIRECTORY / "pydicom" / "dataset.pyi"
 
 
-ElementDictType: dict[int, tuple[str, str, str, str]]
+ElementDictType = dict[int, tuple[str, str, str, str]]
 
 
 def generate_dataset_hints(d: ElementDictType, indent: str = "    ") -> list[str]:
@@ -107,18 +107,18 @@ def write_dataset_stub(d: ElementDictType) -> None:
     modified = []
     modified.append("from pydicom._type_definitions import *\n")
 
-    with open(DATASET_STUB, 'r') as f:
+    with open(DS_SRC, 'r') as f:
         for idx, line in enumerate(f.readlines()):
             modified.append(line)
             if line.startswith("class Dataset:"):
                 modified.append("    # Auto-generated class attributes below\n")
                 modified.append("\n")
-                modified.extend(generate_dataset_hints(element_dict))
+                modified.extend(generate_dataset_hints(d))
                 modified.append("\n")
                 modified.append("    # Auto-generated class attributes above\n")
                 modified.append("\n")
 
-    with open(TEST_OUTPUT, "w") as f:
+    with open(DS_DST, "w") as f:
         f.write("".join(modified))
 
 

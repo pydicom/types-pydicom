@@ -53,7 +53,7 @@ class Dataset:
     ReceivingPresentationAddress: str | None  # UR, 1, 3
     PrivateInformationCreatorUID: str | UID | None  # UI, 1, 3
     PrivateInformation: bytes  # OB, 1, 1C
-
+    
     # Part 3, C.7.6.3.3: Image Pixel Description Macro
     SamplesPerPixel: int  # US, 1, 1
     PlanarConfiguration: int  # US, 1, 1C
@@ -64,7 +64,7 @@ class Dataset:
     BitsStored: int  # US, 1, 1
     HighBit: int  # US, 1, 1
     PixelRepresentation: int  # US, 1, 1
-
+    
     # Part 6, Table 6-1: All other public elements
     CommandGroupLength: UL_1_Type
     AffectedSOPClassUID: UI_1_Type

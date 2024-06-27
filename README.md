@@ -1,6 +1,5 @@
 # types-pydicom
-Extended type hints for [pydicom's](https://github.com/pydicom/pydicom)
-Dataset element keywords.
+Extended type hints for [pydicom's](https://github.com/pydicom/pydicom) [Dataset](https://pydicom.github.io/pydicom/stable/reference/generated/pydicom.dataset.Dataset.html#pydicom.dataset.Dataset) element keywords.
 
 ## Installation
 ```bash
@@ -39,7 +38,5 @@ pip install -e .[dev]
 
 ### Updating
 ```bash
-cd types-pydicom
-source env/env310/bin/activate
 python scripts/update_package.py
 ```

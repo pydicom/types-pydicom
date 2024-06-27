@@ -3,8 +3,8 @@ name: publish-pypi-deploy
 on:
   release:
     types: [ published ]
-  push:
-    branches: [main]
+  pull_request:
+    branches: [ main ]
 
 jobs:
 

@@ -29,13 +29,13 @@ jobs:
           python scripts/update_package.py
           git add src/pydicom-stubs
           git status
-      - name: Create Pull Request
-        # Only creates a new PR if there are changes
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
-          title: "Update package"
-          # If workflow is running from `pull_request`
-          base: ${{ github.head_ref }}
-          # If workflow is running from `release`
-          # base: main
+      # - name: Create Pull Request
+      #   # Only creates a new PR if there are changes
+      #   uses: peter-evans/create-pull-request@v6
+      #   with:
+      #     token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
+      #     title: "[bot] Update package"
+      #     # If workflow is running from `pull_request`
+      #     base: ${{ github.head_ref }}
+      #     # If workflow is running from `release`
+      #     # base: main

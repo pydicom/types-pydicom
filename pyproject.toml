@@ -26,7 +26,11 @@ version = "3.0.0.0.dev0"
 pydicom_stubs = ["*.pyi"]
 
 [project.optional-dependencies]
-dev =  ["mypy", "pydicom", "build"]
+dev =  [
+    "mypy",
+    "pydicom @ git+https://github.com/pydicom/pydicom.git@main",
+    "build",
+]
 
 [project.urls]
 homepage = "https://github.com/pydicom/types-pydicom"

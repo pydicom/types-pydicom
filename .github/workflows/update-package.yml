@@ -33,7 +33,7 @@ jobs:
         # Only creates a new PR if there are changes
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
+          token: ${{ secrets.TYPES_PYDICOM_PAT }}
           title: "Update package"
           # If workflow is running from `pull_request`
           base: ${{ github.head_ref }}

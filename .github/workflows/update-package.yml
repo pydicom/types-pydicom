@@ -8,6 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    # Disallow running on events triggered by a fork
+    if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - name: Checkout package
         uses: actions/checkout@v4
@@ -24,10 +26,8 @@ jobs:
           pip install -e ../pydicom
       - name: Update package
         run: |
-          ls -l
-          ls -l ../pydicom
-          git status
           python scripts/update_package.py
+          git add src/pydicom-stubs
           git status
       - name: Create Pull Request
         # Only creates a new PR if there are changes

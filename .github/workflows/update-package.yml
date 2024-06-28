@@ -35,3 +35,7 @@ jobs:
         with:
           token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
           title: "Update package"
+          # If workflow is running from `pull_request`
+          base: ${{ github.head_ref }}
+          # If workflow is running from `release`
+          # base: main

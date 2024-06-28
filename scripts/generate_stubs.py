@@ -5,8 +5,8 @@ from typing import Any
 from pydicom._dicom_dict import DicomDictionary
 
 BASE_DIRECTORY = Path(__file__).parent.parent
+DS_SRC = BASE_DIRECTORY / "src" / "pydicom-stubs" / "dataset.pyi"
 DS_DST = BASE_DIRECTORY / "custom" / "dataset.pyi"
-DS_SRC = BASE_DIRECTORY / "pydicom-stubs" / "dataset.pyi"
 
 
 ElementDictType = dict[int, tuple[str, str, str, str]]

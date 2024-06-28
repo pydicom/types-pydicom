@@ -105,6 +105,10 @@ def update_version() -> None:
         # If X.Y.Z don't match, use X.Y.Z.0
         version = f"{'.'.join(pyd_version)}.0"
 
+    if version.split(".") == typd_version:
+        print(f"No package version change required")
+        return
+
     print(f"Changing package version to '{version}'")
     for idx, line in enumerate(contents):
         if line.startswith("version = "):

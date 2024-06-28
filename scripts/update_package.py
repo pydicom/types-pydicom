@@ -41,7 +41,7 @@ if __name__ == "__main__":
     subprocess.run(["which", "stubgen"], shell=True)
     returncode = subprocess.run(
         [
-            f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
+            # f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
             f"stubgen {os.fspath(PYDICOM_DIRECTORY)} -o .",
         ],
         shell=True,
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     subprocess.run(
         [
-            f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
+            # f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
             "python scripts/generate_stubs.py",
         ],
         shell=True,

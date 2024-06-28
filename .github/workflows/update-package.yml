@@ -21,6 +21,7 @@ jobs:
           pip install mypy
           mkdir ../pydicom
           git clone https://github.com/pydicom/pydicom ../pydicom
+          pip install -e ../pydicom
       - name: Update package
         run: |
           ls -l

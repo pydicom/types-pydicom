@@ -34,4 +34,5 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
+          git-token: ${{ secrets.TYPES_PYDICOM_PAT }}
           title: "Update package"

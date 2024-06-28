@@ -8,7 +8,7 @@ import sys
 
 BASE_DIRECTORY = Path(__file__).parent.parent
 SRC_DIRECTORY = BASE_DIRECTORY / "custom"
-DST_DIRECTORY = BASE_DIRECTORY / "pydicom-stubs"
+DST_DIRECTORY = BASE_DIRECTORY / "src" / "pydicom-stubs"
 PYDICOM_DIRECTORY = BASE_DIRECTORY.parent / "pydicom" / "src" / "pydicom"
 
 
@@ -36,20 +36,25 @@ if __name__ == "__main__":
     if DST_DIRECTORY.exists():
         shutil.rmtree(DST_DIRECTORY)
 
+    if (BASE_DIRECTORY / "pydicom").exists():
+        shutil.rmtree(BASE_DIRECTORY / "pydicom")
+
     # Generate basic stub files using mypy's `stubgen`
     print("Generating basic stub files with stubgen")
     subprocess.run(["which", "stubgen"], shell=True)
-    returncode = subprocess.run(
+    p = subprocess.run(
         [
-            f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
             f"stubgen {os.fspath(PYDICOM_DIRECTORY)} -o .",
         ],
         shell=True,
     )
 
-    if not list(DST_DIRECTORY.glob("*.pyi")):
+    if p.returncode != 0:
         print("  Failed to generate the basic stub files")
         sys.exit(1)
+
+    # Move the basic stubs to the correct location
+    shutil.move(BASE_DIRECTORY / "pydicom", DST_DIRECTORY)
 
     # Generate the custom stub files
     print("Generating custom stub files")
@@ -58,7 +63,6 @@ if __name__ == "__main__":
 
     subprocess.run(
         [
-            f". {os.fspath(BASE_DIRECTORY / 'env' / 'env310' / 'bin' / 'activate')};"
             "python scripts/generate_stubs.py",
         ],
         shell=True,

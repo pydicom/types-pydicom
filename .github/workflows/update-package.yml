@@ -1,0 +1,37 @@
+name: update-package
+
+on:
+  # workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout package
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          pip install -U pip
+          pip install mypy
+          mkdir ../pydicom
+          git clone https://github.com/pydicom/pydicom ../pydicom
+          pip install -e ../pydicom
+      - name: Update package
+        run: |
+          ls -l
+          ls -l ../pydicom
+          git status
+          python scripts/update_package.py
+          git status
+      - name: Create Pull Request
+        # Only creates a new PR if there are changes
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
+          title: "Update package"

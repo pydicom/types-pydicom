@@ -1,4 +1,4 @@
-name: Update types-pydicom and create a new PR
+name: update-package
 
 on:
   # workflow_dispatch:

@@ -42,7 +42,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.AUTO_UPDATE_PACKAGE }}
-          title: "[update-bot] Update README.md"
+          title: "[update-bot] Update package"
           branch: ${{ steps.branch.outputs.BRANCH }}
           commit-message: "Automated package update"
           body: |

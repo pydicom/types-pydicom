@@ -35,44 +35,44 @@ VALIDATORS: Incomplete
 def validate_value(vr: str, value: Any, validation_mode: int, validator: Callable[[str, Any], tuple[bool, str]] | None = None) -> None: ...
 
 class VR(str, Enum):
-    AE: str
-    AS: str
-    AT: str
-    CS: str
-    DA: str
-    DS: str
-    DT: str
-    FD: str
-    FL: str
-    IS: str
-    LO: str
-    LT: str
-    OB: str
-    OD: str
-    OF: str
-    OL: str
-    OW: str
-    OV: str
-    PN: str
-    SH: str
-    SL: str
-    SQ: str
-    SS: str
-    ST: str
-    SV: str
-    TM: str
-    UC: str
-    UI: str
-    UL: str
-    UN: str
-    UR: str
-    US: str
-    UT: str
-    UV: str
-    US_SS_OW: str
-    US_SS: str
-    US_OW: str
-    OB_OW: str
+    AE = 'AE'
+    AS = 'AS'
+    AT = 'AT'
+    CS = 'CS'
+    DA = 'DA'
+    DS = 'DS'
+    DT = 'DT'
+    FD = 'FD'
+    FL = 'FL'
+    IS = 'IS'
+    LO = 'LO'
+    LT = 'LT'
+    OB = 'OB'
+    OD = 'OD'
+    OF = 'OF'
+    OL = 'OL'
+    OW = 'OW'
+    OV = 'OV'
+    PN = 'PN'
+    SH = 'SH'
+    SL = 'SL'
+    SQ = 'SQ'
+    SS = 'SS'
+    ST = 'ST'
+    SV = 'SV'
+    TM = 'TM'
+    UC = 'UC'
+    UI = 'UI'
+    UL = 'UL'
+    UN = 'UN'
+    UR = 'UR'
+    US = 'US'
+    UT = 'UT'
+    UV = 'UV'
+    US_SS_OW = 'US or SS or OW'
+    US_SS = 'US or SS'
+    US_OW = 'US or OW'
+    OB_OW = 'OB or OW'
 
 STANDARD_VR: Incomplete
 AMBIGUOUS_VR: Incomplete
@@ -82,11 +82,12 @@ BYTES_VR: Incomplete
 FLOAT_VR: Incomplete
 INT_VR: Incomplete
 LIST_VR: Incomplete
-STR_VR: Incomplete
+STR_VR = DEFAULT_CHARSET_VR | CUSTOMIZABLE_CHARSET_VR
 ALLOW_BACKSLASH: Incomplete
 LONG_VALUE_VR: Incomplete
 EXPLICIT_VR_LENGTH_16: Incomplete
 EXPLICIT_VR_LENGTH_32: Incomplete
+BUFFERABLE_VRS: Incomplete
 
 class _DateTimeBase:
     original_string: str

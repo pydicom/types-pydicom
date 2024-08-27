@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from collections.abc import Callable as Callable
 from enum import Enum
 from pydicom.dataset import Dataset as Dataset
@@ -9,7 +8,7 @@ from pydicom.pixels.utils import as_pixel_options as as_pixel_options
 from pydicom.uid import UID as UID
 from typing import Any, TypedDict
 
-Buffer: Incomplete
+Buffer = bytes | bytearray | memoryview
 
 class CoderBase:
     def __init__(self, uid: UID, decoder: bool) -> None: ...
@@ -30,19 +29,19 @@ class CoderBase:
     def UID(self) -> UID: ...
 
 class PhotometricInterpretation(str, Enum):
-    MONOCHROME1: str
-    MONOCHROME2: str
-    PALETTE_COLOR: str
-    RGB: str
-    YBR_FULL: str
-    YBR_FULL_422: str
-    YBR_ICT: str
-    YBR_RCT: str
-    HSV: str
-    ARGB: str
-    CMYK: str
-    YBR_PARTIAL_422: str
-    YBR_PARTIAL_420: str
+    MONOCHROME1 = 'MONOCHROME1'
+    MONOCHROME2 = 'MONOCHROME2'
+    PALETTE_COLOR = 'PALETTE COLOR'
+    RGB = 'RGB'
+    YBR_FULL = 'YBR_FULL'
+    YBR_FULL_422 = 'YBR_FULL_422'
+    YBR_ICT = 'YBR_ICT'
+    YBR_RCT = 'YBR_RCT'
+    HSV = 'HSV'
+    ARGB = 'ARGB'
+    CMYK = 'CMYK'
+    YBR_PARTIAL_422 = 'YBR_PARTIAL_422'
+    YBR_PARTIAL_420 = 'YBR_PARTIAL_420'
 
 class RunnerBase:
     def __init__(self, tsyntax: UID) -> None: ...

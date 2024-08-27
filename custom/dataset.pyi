@@ -8,12 +8,12 @@ from pydicom._version import __version_info__ as __version_info__
 from pydicom.charset import convert_encodings as convert_encodings, default_encoding as default_encoding
 from pydicom.config import logger as logger
 from pydicom.datadict import dictionary_VR as dictionary_VR, dictionary_description as dictionary_description, get_private_entry as get_private_entry, keyword_for_tag as keyword_for_tag, repeater_has_keyword as repeater_has_keyword, tag_for_keyword as tag_for_keyword
-from pydicom.dataelem import DataElement as DataElement, DataElement_from_raw as DataElement_from_raw, RawDataElement as RawDataElement
+from pydicom.dataelem import DataElement as DataElement, RawDataElement as RawDataElement, convert_raw_data_element as convert_raw_data_element
 from pydicom.filebase import ReadableBuffer as ReadableBuffer, WriteableBuffer as WriteableBuffer
 from pydicom.fileutil import PathType as PathType, path_from_pathlike as path_from_pathlike
 from pydicom.misc import warn_and_log as warn_and_log
 from pydicom.pixels import compress as compress, convert_color_space as convert_color_space, decompress as decompress, pixel_array as pixel_array
-from pydicom.pixels.utils import get_image_pixel_ids as get_image_pixel_ids, reshape_pixel_array as reshape_pixel_array
+from pydicom.pixels.utils import get_image_pixel_ids as get_image_pixel_ids, reshape_pixel_array as reshape_pixel_array, set_pixel_data as set_pixel_data
 from pydicom.tag import BaseTag as BaseTag, TAG_PIXREP as TAG_PIXREP, Tag as Tag, TagType as TagType, tag_in_exception as tag_in_exception
 from pydicom.uid import PYDICOM_IMPLEMENTATION_UID as PYDICOM_IMPLEMENTATION_UID, UID as UID
 from pydicom.valuerep import AMBIGUOUS_VR as AMBIGUOUS_VR
@@ -128,6 +128,7 @@ class Dataset:
     PyramidUID: UI_1_Type
     RelatedGeneralSOPClassUID: UI_1N_Type
     OriginalSpecializedSOPClassUID: UI_1_Type
+    SyntheticData: CS_1_Type
     StudyDate: DA_1_Type
     SeriesDate: DA_1_Type
     AcquisitionDate: DA_1_Type
@@ -274,6 +275,7 @@ class Dataset:
     ManufacturerModelName: LO_1_Type
     ReferencedStudySequence: SQType
     ReferencedPerformedProcedureStepSequence: SQType
+    ReferencedInstancesBySOPClassSequence: SQType
     ReferencedSeriesSequence: SQType
     ReferencedPatientSequence: SQType
     ReferencedVisitSequence: SQType
@@ -299,6 +301,7 @@ class Dataset:
     FailedSOPSequence: SQType
     ReferencedSOPSequence: SQType
     OtherFailuresSequence: SQType
+    FailedStudySequence: SQType
     StudiesContainingOtherReferencedInstancesSequence: SQType
     RelatedSeriesSequence: SQType
     DerivationDescription: ST_1_Type
@@ -397,6 +400,7 @@ class Dataset:
     PatientTelephoneNumbers: SH_1N_Type
     PatientTelecomInformation: LT_1_Type
     EthnicGroup: SH_1_Type
+    EthnicGroupCodeSequence: SQType
     Occupation: SH_1_Type
     SmokingStatus: CS_1_Type
     AdditionalPatientHistory: LT_1_Type
@@ -420,21 +424,28 @@ class Dataset:
     ClinicalTrialSponsorName: LO_1_Type
     ClinicalTrialProtocolID: LO_1_Type
     ClinicalTrialProtocolName: LO_1_Type
+    IssuerOfClinicalTrialProtocolID: LO_1_Type
+    OtherClinicalTrialProtocolIDsSequence: SQType
     ClinicalTrialSiteID: LO_1_Type
     ClinicalTrialSiteName: LO_1_Type
+    IssuerOfClinicalTrialSiteID: LO_1_Type
     ClinicalTrialSubjectID: LO_1_Type
+    IssuerOfClinicalTrialSubjectID: LO_1_Type
     ClinicalTrialSubjectReadingID: LO_1_Type
+    IssuerOfClinicalTrialSubjectReadingID: LO_1_Type
     ClinicalTrialTimePointID: LO_1_Type
     ClinicalTrialTimePointDescription: ST_1_Type
     LongitudinalTemporalOffsetFromEvent: FD_1_Type
     LongitudinalTemporalEventType: CS_1_Type
     ClinicalTrialTimePointTypeCodeSequence: SQType
+    IssuerOfClinicalTrialTimePointID: LO_1_Type
     ClinicalTrialCoordinatingCenterName: LO_1_Type
     PatientIdentityRemoved: CS_1_Type
     DeidentificationMethod: LO_1N_Type
     DeidentificationMethodCodeSequence: SQType
     ClinicalTrialSeriesID: LO_1_Type
     ClinicalTrialSeriesDescription: LO_1_Type
+    IssuerOfClinicalTrialSeriesID: LO_1_Type
     ClinicalTrialProtocolEthicsCommitteeName: LO_1_Type
     ClinicalTrialProtocolEthicsCommitteeApprovalNumber: LO_1_Type
     ConsentForClinicalTrialUseSequence: SQType
@@ -1724,6 +1735,7 @@ class Dataset:
     HorizontalFieldOfView: FL_1_Type
     PupilDilated: CS_1_Type
     DegreeOfDilation: FL_1_Type
+    VertexDistance: FD_1_Type
     StereoBaselineAngle: FL_1_Type
     StereoBaselineDisplacement: FL_1_Type
     StereoHorizontalPixelOffset: FL_1_Type
@@ -3116,8 +3128,6 @@ class Dataset:
     VolumetricPresentationInputIndex: US_1_Type
     PresentationStateCompositorComponentSequence: SQType
     WeightingTransferFunctionSequence: SQType
-    WeightingLookupTableDescriptor: US_N_Type
-    WeightingLookupTableData: OB_1_Type
     VolumetricAnnotationSequence: SQType
     ReferencedStructuredContextSequence: SQType
     ReferencedContentItem: UI_1_Type
@@ -3648,6 +3658,8 @@ class Dataset:
     ROIDescription: ST_1_Type
     ROIDisplayColor: IS_N_Type
     ROIVolume: DS_1_Type
+    ROIDateTime: DT_1_Type
+    ROIObservationDateTime: DT_1_Type
     RTRelatedROISequence: SQType
     RTROIRelationship: CS_1_Type
     ROIGenerationAlgorithm: CS_1_Type
@@ -3659,6 +3671,11 @@ class Dataset:
     NumberOfContourPoints: IS_1_Type
     ContourNumber: IS_1_Type
     SourcePixelPlanesCharacteristicsSequence: SQType
+    SourceSeriesSequence: SQType
+    SourceSeriesInformationSequence: SQType
+    ROICreatorSequence: SQType
+    ROIInterpreterSequence: SQType
+    ROIObservationContextCodeSequence: SQType
     ContourData: DS_N_Type
     RTROIObservationsSequence: SQType
     ObservationNumber: IS_1_Type
@@ -3821,6 +3838,7 @@ class Dataset:
     TableTopVerticalPositionTolerance: DS_1_Type
     TableTopLongitudinalPositionTolerance: DS_1_Type
     TableTopLateralPositionTolerance: DS_1_Type
+    TableTopPositionAlignmentUID: UI_1_Type
     RTPlanRelationship: CS_1_Type
     FractionGroupSequence: SQType
     FractionGroupNumber: IS_1_Type
@@ -4380,6 +4398,9 @@ class Dataset:
     PatientSupportDisplacementSequence: SQType
     DisplacementReferenceLocationCodeSequence: SQType
     RTRadiationSetDeliveryUsage: CS_1_Type
+    PatientTreatmentPreparationSequence: SQType
+    PatientToEquipmentRelationshipSequence: SQType
+    ImagingEquipmentToTreatmentDeliveryDeviceRelationshipSequence: SQType
     ReferencedRTPlanSequence: SQType
     ReferencedBeamSequence: SQType
     ReferencedBeamNumber: IS_1_Type
@@ -4758,8 +4779,8 @@ class Dataset:
     def popitem(self) -> tuple[BaseTag, _DatasetValue]: ...
     def setdefault(self, key: TagType, default: Any | None = None) -> DataElement: ...
     def convert_pixel_data(self, handler_name: str = '') -> None: ...
-    def compress(self, transfer_syntax_uid: str, arr: numpy.ndarray | None = None, encoding_plugin: str = '', encapsulate_ext: bool = False, *, new_instance_uid: bool = True, jls_error: int | None = None, j2k_cr: list[float] | None = None, j2k_psnr: list[float] | None = None, **kwargs: Any) -> None: ...
-    def decompress(self, handler_name: str = '', *, as_rgb: bool = True, new_instance_uid: bool = True, decoding_plugin: str = '', **kwargs: Any) -> None: ...
+    def compress(self, transfer_syntax_uid: str, arr: numpy.ndarray | None = None, encoding_plugin: str = '', encapsulate_ext: bool = False, *, generate_instance_uid: bool = True, jls_error: int | None = None, j2k_cr: list[float] | None = None, j2k_psnr: list[float] | None = None, **kwargs: Any) -> None: ...
+    def decompress(self, handler_name: str = '', *, as_rgb: bool = True, generate_instance_uid: bool = True, decoding_plugin: str = '', **kwargs: Any) -> None: ...
     def overlay_array(self, group: int) -> numpy.ndarray: ...
     @property
     def pixel_array(self) -> numpy.ndarray: ...
@@ -4773,10 +4794,11 @@ class Dataset:
     @property
     def read_little_endian(self) -> bool | None: ...
     def remove_private_tags(self) -> None: ...
-    def save_as(self, filename: str | os.PathLike[AnyStr] | BinaryIO | WriteableBuffer, __write_like_original: bool | None = None, /, *, implicit_vr: bool | None = None, little_endian: bool | None = None, enforce_file_format: bool = False, **kwargs: Any) -> None: ...
+    def save_as(self, filename: str | os.PathLike[AnyStr] | BinaryIO | WriteableBuffer, __write_like_original: bool | None = None, /, *, implicit_vr: bool | None = None, little_endian: bool | None = None, enforce_file_format: bool = False, overwrite: bool = True, **kwargs: Any) -> None: ...
     def ensure_file_meta(self) -> None: ...
     def __setattr__(self, name: str, value: Any) -> None: ...
     def __setitem__(self, key: slice | TagType, elem: _DatasetValue) -> None: ...
+    def set_pixel_data(self, arr: numpy.ndarray, photometric_interpretation: str, bits_stored: int, *, generate_instance_uid: bool = True) -> None: ...
     def top(self) -> str: ...
     def trait_names(self) -> list[str]: ...
     def update(self, d: _DatasetType) -> None: ...
@@ -4786,16 +4808,17 @@ class Dataset:
     def from_json(cls, json_dataset: dict[str, Any] | str | bytes | bytearray, bulk_data_uri_handler: Callable[[str, str, str], None | str | int | float | bytes] | Callable[[str], None | str | int | float | bytes] | None = None) -> Dataset: ...
     def to_json_dict(self, bulk_data_threshold: int = 1024, bulk_data_element_handler: Callable[[DataElement], str] | None = None, suppress_invalid_tags: bool = False) -> dict[str, Any]: ...
     def to_json(self, bulk_data_threshold: int = 1024, bulk_data_element_handler: Callable[[DataElement], str] | None = None, dump_handler: Callable[[dict[str, Any]], str] | None = None, suppress_invalid_tags: bool = False) -> str: ...
+    def update_raw_element(self, tag: TagType, *, vr: str | None = None, value: bytes | None = None) -> None: ...
 
 class FileDataset(Dataset):
     preamble: Incomplete
     file_meta: Incomplete
     fileobj_type: Incomplete
-    filename: str
+    filename: Incomplete
+    buffer: Incomplete
     timestamp: Incomplete
     def __init__(self, filename_or_obj: PathType | BinaryIO | ReadableBuffer, dataset: _DatasetType, preamble: bytes | None = None, file_meta: FileMetaDataset | None = None, is_implicit_VR: bool = True, is_little_endian: bool = True) -> None: ...
-    def __copy__(self) -> FileDataset: ...
-    def __deepcopy__(self, _: dict[int, Any] | None) -> FileDataset: ...
+    def __deepcopy__(self, memo: dict[int, Any]) -> FileDataset: ...
 
 def validate_file_meta(file_meta: FileMetaDataset, enforce_standard: bool = True) -> None: ...
 

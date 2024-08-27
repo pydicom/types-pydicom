@@ -8,16 +8,15 @@ from typing import Any, TypeAlias
 JSON_VALUE_KEYS: Incomplete
 
 def convert_to_python_number(value: Any, vr: str) -> Any: ...
-
-OtherValueType: Incomplete
-PNValueType: Incomplete
-SQValueType: Incomplete
+OtherValueType = None | str | int | float
+PNValueType = None | str | dict[str, str]
+SQValueType = dict[str, Any] | None
 ValueType: TypeAlias
 InlineBinaryType: TypeAlias
 BulkDataURIType: TypeAlias
-JSONValueType: Incomplete
-BulkDataType: Incomplete
-BulkDataHandlerType: Incomplete
+JSONValueType = list[ValueType] | InlineBinaryType | BulkDataURIType
+BulkDataType = None | str | int | float | bytes
+BulkDataHandlerType = Callable[[str, str, str], BulkDataType] | None
 
 class JsonDataElementConverter:
     dataset_class: Incomplete

@@ -8,11 +8,11 @@ from pydicom.misc import warn_and_log as warn_and_log
 DATA_ROOT: Incomplete
 
 class DataTypes(IntEnum):
-    DATASET: int
-    CHARSET: int
-    PALETTE: int
-    DICOMDIR: int
-    JPEG: int
+    DATASET = 0
+    CHARSET = 1
+    PALETTE = 2
+    DICOMDIR = 3
+    JPEG = 4
 
 def get_external_sources() -> dict: ...
 def external_data_sources() -> dict: ...

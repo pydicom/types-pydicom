@@ -3,10 +3,10 @@ from collections.abc import Callable as Callable, Iterator, MutableSequence
 from pydicom import config as config
 from pydicom.charset import convert_encodings as convert_encodings, default_encoding as default_encoding
 from pydicom.config import logger as logger
-from pydicom.dataelem import DataElement as DataElement, DataElement_from_raw as DataElement_from_raw, RawDataElement as RawDataElement, empty_value_for_VR as empty_value_for_VR
+from pydicom.dataelem import DataElement as DataElement, RawDataElement as RawDataElement, convert_raw_data_element as convert_raw_data_element, empty_value_for_VR as empty_value_for_VR
 from pydicom.dataset import Dataset as Dataset, FileDataset as FileDataset, FileMetaDataset as FileMetaDataset
 from pydicom.errors import InvalidDicomError as InvalidDicomError
-from pydicom.filebase import ReadableBuffer as ReadableBuffer
+from pydicom.filebase import DicomBytesIO as DicomBytesIO, ReadableBuffer as ReadableBuffer
 from pydicom.fileutil import PathType as PathType, path_from_pathlike as path_from_pathlike, read_undefined_length_value as read_undefined_length_value
 from pydicom.misc import size_in_bytes as size_in_bytes, warn_and_log as warn_and_log
 from pydicom.sequence import Sequence as Sequence

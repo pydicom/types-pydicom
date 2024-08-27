@@ -94,8 +94,7 @@ class FileInstance:
     def SOPInstanceUID(self) -> UID: ...
     @property
     def TransferSyntaxUID(self) -> UID: ...
-
-DSPathType: Incomplete
+DSPathType = Dataset | str | os.PathLike
 
 class FileSet:
     def __init__(self, ds: DSPathType | None = None) -> None: ...

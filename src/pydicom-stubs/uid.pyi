@@ -248,6 +248,7 @@ PatientRadiationDoseSRStorage: Incomplete
 PlannedImagingAgentAdministrationSRStorage: Incomplete
 PerformedImagingAgentAdministrationSRStorage: Incomplete
 EnhancedXRayRadiationDoseSRStorage: Incomplete
+WaveformAnnotationSRStorage: Incomplete
 TwelveLeadECGWaveformStorage: Incomplete
 GeneralECGWaveformStorage: Incomplete
 AmbulatoryECGWaveformStorage: Incomplete

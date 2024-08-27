@@ -1,8 +1,9 @@
 from _typeshed import Incomplete
 from collections.abc import Callable as Callable
+from types import TracebackType
 from typing import Any, Protocol, TypeVar
 
-ExitException: Incomplete
+ExitException = tuple[type[BaseException] | None, BaseException | None, TracebackType | None]
 Self = TypeVar('Self', bound='DicomIO')
 
 class ReadableBuffer(Protocol):
@@ -29,7 +30,9 @@ class DicomIO:
     @is_implicit_VR.setter
     def is_implicit_VR(self, value: bool) -> None: ...
     @property
-    def name(self) -> str: ...
+    def name(self) -> str | None: ...
+    @name.setter
+    def name(self, name: str) -> None: ...
     @property
     def parent(self) -> ReadableBuffer | WriteableBuffer: ...
     def read(self, size: int = -1, /) -> bytes: ...

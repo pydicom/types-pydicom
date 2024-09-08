@@ -20,7 +20,7 @@ license = {text = "MIT"}
 name = "types-pydicom"
 readme = "README.md"
 requires-python = ">=3.10"
-version = "3.0.0rc1.0"
+version = "3.0.0.0"
 
 [tool.setuptools.package-data]
 pydicom_stubs = ["*.pyi"]

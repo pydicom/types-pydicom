@@ -28,7 +28,7 @@ pydicom_stubs = ["*.pyi"]
 [project.optional-dependencies]
 dev =  [
     "mypy",
-    # "pydicom @ git+https://github.com/pydicom/pydicom.git@main",
+    "pydicom @ git+https://github.com/pydicom/pydicom.git@main",
     "build",
 ]
 
